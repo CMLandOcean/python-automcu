@@ -497,7 +497,9 @@ class AutoMCU(object):
                     raise RuntimeError("Could not get band indices from wl"\
                             f" range {wlr}")
                 self._band_ranges.append(br)
-                print(f"Computed band range {br} for wavelength window {wlr}")
+                print(f"Computed band range {br} "\
+                      f" ({self.wl[br[0]]},{self.wl[br[1]]})"\
+                      f" from wavelength window {wlr}")
 
         ##Convert _band_ranges to lists of indices
         self.regdefs = []
