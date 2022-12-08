@@ -651,6 +651,8 @@ def main():
     parser = argparse.ArgumentParser(description="Run AutoMCU on an image")
     parser.add_argument("--verbose","-v",action="store_true",
                         help="Verbose output")
+    parser.add_argument("--overwrite",action="store_true",
+                        help="Force overwrite of existing output file")
     parser.add_argument("--config", "-c", default=None,
                         help="Get settings from JSON-formatted config file,"
                              " instead of needing to specify command line args")
@@ -804,6 +806,12 @@ def main():
         raise RuntimeError("Band or wavelength ranges must be specified with"\
                            "either --wl_range or --band_range")
 
+    ##As a failsafe to prevent writing over one of the input files if command
+    ## line argument order is mixed up, don't write output if the file exists
+    if os.path.exists(args.output) and (not args.overwrite):
+        raise RuntimeError(f"File {args.output} already exists. Check args"\
+                            "with -v or use --overwrite if this is intentional")
+    
     #############################
     ##Create the AutoMCU instance
     #############################
