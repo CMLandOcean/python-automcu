@@ -599,6 +599,7 @@ class AutoMCU(object):
             banddesc = [*self._em_names]
             banddesc.extend([f"sd{cls}" for cls in self._em_names])
             banddesc.append("RMSE")
+            print(f"Band names will be: {banddesc}")
             oref.descriptions = banddesc
 
             with rasterio.open(refl_path) as inref:
@@ -747,6 +748,16 @@ def main():
                              " immediately follow the filename, then only the"
                               " first n samples will be read")
     args = parser.parse_args()
+    # args =\
+    #  parser.parse_args(["debugging_data/GAO20220411t125900p0000_iacorn_refl214_ort_sub",
+                       #  "debugging_data/testpy_1.tif",
+                       #  "debugging_data/vswir_2011_2012_pv_599x214_cao3_BbyN.csv:100",
+                       #  "debugging_data/vswir_2011_2012_npv_50x214_cao3_BbyN.csv:50",
+                       #  "debugging_data/vswir_2011_2012_bare_160x214_cao3_BbyN.csv:160",
+                       #  "--names","PV,NPV,Bare","--scale","10000",
+                       #  "--band_range","6,35","--band_range","(165,205)",
+                       #  "--nointerp","--emfwhm"])
+
 
     ##Check that we have ems
     em_csvs = []
