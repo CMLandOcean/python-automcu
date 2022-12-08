@@ -164,10 +164,6 @@ class AutoMCU(object):
             self.num_class += 1
             self._em_names.append("Shade")
 
-        print("Classes will be:")
-        for c in self._em_names:
-            print(f"{c}")
-
         ##Check the specified ranges
         ############################
         # One and only one should be not None
@@ -497,7 +493,7 @@ class AutoMCU(object):
                     raise RuntimeError("Could not get band indices from wl"\
                             f" range {wlr}")
                 self._band_ranges.append(br)
-                print(f"Computed band range {br} "\
+                print(f"Computed band range {br}"\
                       f" ({self.wl[br[0]]},{self.wl[br[1]]})"\
                       f" from wavelength window {wlr}")
 
@@ -505,16 +501,16 @@ class AutoMCU(object):
         self.regdefs = []
         print(f"Found {len(self._band_ranges)} band regions:")
         for br_i, br in enumerate(self._band_ranges):
-            print(f"{br_i+1}: {br}:")
             self.regdefs.append(list(range(br[0],br[1]+1)))
             print(f"{self.regdefs[-1]}")
 
         num_selected_bands = sum([len(rd) for rd in self.regdefs])
-        print(f"Total selected image bands: {num_selected_bands}")
         num_unmixing_bands = num_selected_bands
         if self.sum1:
             num_unmixing_bands += 1
             print(f"Total unmixing bands (incl. sum_to_one): {num_unmixing_bands}")
+        else:
+            print(f"Total unmixing bands: {num_unmixing_bands}")
 
         ##Interpolate and process em libraries for use in building A matrices
         #####################################################################
@@ -748,16 +744,10 @@ def main():
                              " immediately follow the filename, then only the"
                               " first n samples will be read")
     args = parser.parse_args()
-    # args =\
-    #  parser.parse_args(["debugging_data/GAO20220411t125900p0000_iacorn_refl214_ort_sub",
-                       #  "debugging_data/testpy_1.tif",
-                       #  "debugging_data/vswir_2011_2012_pv_599x214_cao3_BbyN.csv:100",
-                       #  "debugging_data/vswir_2011_2012_npv_50x214_cao3_BbyN.csv:50",
-                       #  "debugging_data/vswir_2011_2012_bare_160x214_cao3_BbyN.csv:160",
-                       #  "--names","PV,NPV,Bare","--scale","10000",
-                       #  "--band_range","6,35","--band_range","(165,205)",
-                       #  "--nointerp","--emfwhm"])
-
+    if args.verbose:
+        print("Args:")
+        for k, v in vars(args).items():
+            print(f"{k:12s}: {v}")
 
     ##Check that we have ems
     em_csvs = []
