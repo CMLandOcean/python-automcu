@@ -149,7 +149,7 @@ class AutoMCU(object):
                 self._ems_raw.append(tmpdf.iloc[:,st:end].to_numpy().T)
             else:
                 print(f"Reading all samples of {csv}")
-                self._ems_raw.append(tmpdf.iloc[:,st:].to_numpy().T.T)
+                self._ems_raw.append(tmpdf.iloc[:,st:].to_numpy().T)
 
         #Save the number of em classes 
         self.num_class = len(self._ems_raw)
@@ -237,7 +237,7 @@ class AutoMCU(object):
             fwhm = [avg_spacing]*len(wl)
         self._ems_interp = []
         for rawmat, rawwl, rawfwhm in \
-                zip(self._ems_raw, self._ems_wl, self.ems_fwhm):
+                zip(self._ems_raw, self._ems_wl, self._ems_fwhm):
             ##Build fwhm if needed
             if rawfwhm is None:
                 avg_spacing = np.diff(rawwl).mean()
@@ -532,7 +532,7 @@ class AutoMCU(object):
         for emnum, emdat in enumerate(self._ems_interp):
             if emdat.shape[band_axis] != len(self.wl):
                 raise RuntimeError("Number of bands in interpolated em data"\
-                                   f" for {self.em_names[emnum]}"\
+                                   f" for {self._em_names[emnum]}"\
                                    f" ({emdat.shape[band_axis]})"\
                                    " does not match number of image bands"\
                                    f" ({len(self.wl)})")
@@ -747,16 +747,6 @@ def main():
                              " immediately follow the filename, then only the"
                               " first n samples will be read")
     args = parser.parse_args()
-    # args =\
-    #  parser.parse_args(["debugging_data/GAO20220411t125900p0000_iacorn_refl214_ort_sub",
-                       #  "debugging_data/testpy_1.tif",
-                       #  "debugging_data/vswir_2011_2012_pv_599x214_cao3_BbyN.csv:100",
-                       #  "debugging_data/vswir_2011_2012_npv_50x214_cao3_BbyN.csv:50",
-                       #  "debugging_data/vswir_2011_2012_bare_160x214_cao3_BbyN.csv:160",
-                       #  "--names","PV,NPV,Bare","--scale","10000",
-                       #  "--band_range","6,35","--band_range","(165,205)",
-                       #  "--nointerp","--emfwhm"])
-
 
     ##Check that we have ems
     em_csvs = []
